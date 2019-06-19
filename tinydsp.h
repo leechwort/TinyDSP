@@ -1,3 +1,8 @@
+#include "kiss_fft.h"
+#include "kiss_fftr.h"
+
+#include <stdbool.h>
+
 typedef struct {
 	kiss_fftr_cfg cfg;
 	int fftsize;

@@ -1,19 +1,17 @@
 src = $(wildcard src/*.c)
 kissfft_obj = $(wildcard ext/kissfft/*.o)
 
-LDFLAGS = -lm -Iext/kissfft/ -I./
+LDFLAGS = -lm -Iext/kissfft/ -Itests/ -I./
 
 # list the libfoo rule as a dependency
 all: \
 	tests_x86
 tinydsp.o: libkissfft
 	gcc -Wall -fPIC -c *.c $(LDFLAGS)
-tests_x86: tests/test_x86.c tinydsp.o
-	gcc -Wall -fPIC -o $@ tests/test_x86.c tinydsp.o  $(kissfft_obj) $(LDFLAGS)
-#tinydsp: $(kissfft_obj)
-#	@echo Hello
-#	@echo $(obj)
-#	gcc -o $@ $^ $(LDFLAGS)
+tests_x86: tests/test_x86.c tests/testfuncs.c tinydsp.o
+	gcc -Wall -fPIC -o $@ tests/testfuncs.c \
+		tests/test_x86.c \
+		tinydsp.o  $(kissfft_obj) $(LDFLAGS)
 
 .PHONY: clean
 clean:

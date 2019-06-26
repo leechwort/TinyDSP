@@ -112,8 +112,9 @@ C_DEFS =  \
 -DUSE_HAL_DRIVER \
 -DSTM32F401xE \
 -DUSE_HAL_DRIVER \
--DSTM32F401xE
-
+-DSTM32F401xE \
+-DARM_MATH_CM4 \
+-D__FPU_PRESENT=1
 
 # AS includes
 AS_INCLUDES = 
@@ -152,7 +153,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDSCRIPT = STM32F401RETx_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lnosys 
+LIBS = -lc -lm -lnosys -larm_cortexM4lf_math -LDrivers/CMSIS/Lib -LDrivers/CMSIS/Lib/GCC
 LIBDIR = 
 LDFLAGS = $(MCU) -specs=nano.specs -u _printf_float -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 

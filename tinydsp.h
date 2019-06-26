@@ -1,3 +1,5 @@
+#ifndef TINYDSP_H
+#define TINYDSP_H
 #include "kiss_fft.h"
 #include "kiss_fftr.h"
 
@@ -19,3 +21,5 @@ typedef enum
 tdsp_result tdsp_rfft_init(tdsp_rfft_cfg *cfg, unsigned int fftsize, bool is_ifft);
 tdsp_result tdsp_rfft_perform(tdsp_rfft_cfg *cfg, float *input_data, float *output_data);
 tdsp_result tdsp_rfft_cleanup(tdsp_rfft_cfg *cfg);
+
+#endif /* TINYDSP_H */

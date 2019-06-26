@@ -1,5 +1,5 @@
 #include "testfuncs.h"
-
+#define TEST_DEBUG
 #define WINDOW_SIZE 32
 
 float input_buffer[WINDOW_SIZE] = {

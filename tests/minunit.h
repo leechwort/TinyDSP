@@ -30,8 +30,8 @@
 #if defined(_WIN32)
 #include <Windows.h>
 #if defined(_MSC_VER) && _MSC_VER < 1900
-  #define snprintf _snprintf
-  #define __func__ __FUNCTION__
+#define snprintf _snprintf
+#define __func__ __FUNCTION__
 #endif
 
 #elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
@@ -53,7 +53,8 @@
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 #endif
-
+#elif defined(STM32F401xE)
+#include "stm32f4xx_hal.h"
 #else
 #error "Unable to define timers for an unknown OS."
 #endif
@@ -117,7 +118,7 @@ static void (*minunit_teardown)(void) = NULL;
 	if (minunit_status) {\
 		minunit_fail++;\
 		printf("F");\
-		printf("\n%s\n", minunit_last_message);\
+		printf("\r\n%s\r\n", minunit_last_message);\
 	}\
 	fflush(stdout);\
 	if (minunit_teardown) (*minunit_teardown)();\
@@ -127,10 +128,10 @@ static void (*minunit_teardown)(void) = NULL;
 #define MU_REPORT() MU__SAFE_BLOCK(\
 	double minunit_end_real_timer;\
 	double minunit_end_proc_timer;\
-	printf("\n\n%d tests, %d assertions, %d failures\n", minunit_run, minunit_assert, minunit_fail);\
+	printf("\r\n\n%d tests, %d assertions, %d failures\r\n", minunit_run, minunit_assert, minunit_fail);\
 	minunit_end_real_timer = mu_timer_real();\
 	minunit_end_proc_timer = mu_timer_cpu();\
-	printf("\nFinished in %.8f seconds (real) %.8f seconds (proc)\n\n",\
+	printf("\r\nFinished in %.8f seconds (real) %.8f seconds (proc)\r\n\n",\
 		minunit_end_real_timer - minunit_real_timer,\
 		minunit_end_proc_timer - minunit_proc_timer);\
 )
@@ -149,7 +150,7 @@ static void (*minunit_teardown)(void) = NULL;
 
 #define mu_fail(message) MU__SAFE_BLOCK(\
 	minunit_assert++;\
-	snprintf(minunit_last_message, MINUNIT_MESSAGE_LEN, "%s failed:\n\t%s:%d: %s", __func__, __FILE__, __LINE__, message);\
+	snprintf(minunit_last_message, MINUNIT_MESSAGE_LEN, "%s failed:\r\n\t%s:%d: %s", __func__, __FILE__, __LINE__, message);\
 	minunit_status = 1;\
 	return;\
 )
@@ -172,7 +173,7 @@ static void (*minunit_teardown)(void) = NULL;
 	minunit_tmp_e = (expected);\
 	minunit_tmp_r = (result);\
 	if (minunit_tmp_e != minunit_tmp_r) {\
-		snprintf(minunit_last_message, MINUNIT_MESSAGE_LEN, "%s failed:\n\t%s:%d: %d expected but was %d", __func__, __FILE__, __LINE__, minunit_tmp_e, minunit_tmp_r);\
+		snprintf(minunit_last_message, MINUNIT_MESSAGE_LEN, "%s failed:\r\n\t%s:%d: %d expected but was %d", __func__, __FILE__, __LINE__, minunit_tmp_e, minunit_tmp_r);\
 		minunit_status = 1;\
 		return;\
 	} else {\
@@ -188,7 +189,7 @@ static void (*minunit_teardown)(void) = NULL;
 	minunit_tmp_r = (result);\
 	if (fabs(minunit_tmp_e-minunit_tmp_r) > MINUNIT_EPSILON) {\
 		int minunit_significant_figures = 1 - log10(MINUNIT_EPSILON);\
-		snprintf(minunit_last_message, MINUNIT_MESSAGE_LEN, "%s failed:\n\t%s:%d: %.*g expected but was %.*g", __func__, __FILE__, __LINE__, minunit_significant_figures, minunit_tmp_e, minunit_significant_figures, minunit_tmp_r);\
+		snprintf(minunit_last_message, MINUNIT_MESSAGE_LEN, "%s failed:\r\n\t%s:%d: %.*g expected but was %.*g", __func__, __FILE__, __LINE__, minunit_significant_figures, minunit_tmp_e, minunit_significant_figures, minunit_tmp_r);\
 		minunit_status = 1;\
 		return;\
 	} else {\

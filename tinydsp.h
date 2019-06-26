@@ -1,12 +1,29 @@
 #ifndef TINYDSP_H
 #define TINYDSP_H
-#include "kiss_fft.h"
-#include "kiss_fftr.h"
 
 #include <stdbool.h>
 
+/* Choose FFT engine USE_KISSFFT - generic USE_ARMDSP - ARM-specific */
+#define USE_KISSFFT
+//#define USE_ARMDSP
+
+#if defined(USE_KISSFFT)
+#include "kiss_fft.h"
+#include "kiss_fftr.h"
+#elif defined(USE_ARMDSP)
+#include "arm_math.h"
+#include "arm_const_structs.h"
+#endif
+
 typedef struct {
+
+#if defined(USE_KISSFFT)
 	kiss_fftr_cfg cfg;
+#elif defined(USE_ARMDSP)
+	arm_rfft_fast_instance_f32 S;
+	arm_status status;
+#endif
+	bool is_ifft;
 	int fftsize;
 	float *input_data;
 	float *output_data;

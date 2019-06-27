@@ -1,3 +1,10 @@
+/*
+ *  Copyright (c) 2019, Artem Synytsyn <a.synytsyn@gmail.com>
+ *  All rights reserved.
+ *
+ *  SPDX-License-Identifier: BSD-3-Clause
+ *  See COPYING file for more information.
+ */
 #include "tinydsp.h"
 #include <stdio.h>
 #include <math.h>

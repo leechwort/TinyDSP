@@ -295,7 +295,10 @@ static double mu_timer_real(void)
 	/* AIX, BSD, Cygwin, HP-UX, Linux, OSX, POSIX, Solaris. ----- */
 	gettimeofday( &tm, NULL );
 	return (double)tm.tv_sec + (double)tm.tv_usec / 1000000.0;
-#else
+#elif defined(STM32F401xE)
+	uint32_t ticks = HAL_GetTick();
+	return (double) ticks/1000.0;
+	#else
 	return -1.0;		/* Failed. */
 #endif
 }
